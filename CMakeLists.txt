@@ -3,15 +3,13 @@ project(learning_image_geometry)
 
 #Personal configuration, please check where is opencv-config.cmake
 #on your machine
-set(OpenCV_DIR /opt/ros/kinetic/share/OpenCV-3.1.0-dev)
+find_package(OpenCV REQUIRED QUIET)
 find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   image_geometry
   image_transport
   image_view
   sensor_msgs         #Added from the original CMake file
-  #opencv2            #Commented, probably not supported
-  OpenCV
   tf
 )
 
@@ -28,7 +26,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES learning_image_geometry
-#  CATKIN_DEPENDS cv_bridge image_geometry image_transport image_view opencv2 tf
+   CATKIN_DEPENDS cv_bridge image_geometry image_transport image_view tf
 #  DEPENDS system_lib
 )
 
@@ -44,5 +42,11 @@ include_directories(
   ${OpenCV_INCLUDE_DIRS}
 )
 
+
 ## Modified from the original tutorial in order to work with catkin_make
 add_executable(draw_frames draw_frames.cpp)
+
+target_link_libraries(draw_frames
+  ${catkin_LIBRARIES}
+  ${OpenCV_LIBRARIES} 
+)
